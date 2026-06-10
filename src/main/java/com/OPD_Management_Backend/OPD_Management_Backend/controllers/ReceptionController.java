@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.OPD_Management_Backend.OPD_Management_Backend.dtos.ReceptionDto;
 import com.OPD_Management_Backend.OPD_Management_Backend.entities.Doctor;
 import com.OPD_Management_Backend.OPD_Management_Backend.entities.Reception;
+import com.OPD_Management_Backend.OPD_Management_Backend.entities.Role;
 import com.OPD_Management_Backend.OPD_Management_Backend.services.DoctorService;
 import com.OPD_Management_Backend.OPD_Management_Backend.services.ReceptionService;
 
@@ -24,6 +27,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/receptions")
+@CrossOrigin(origins = "http://localhost:5173")
 public class ReceptionController {
 	
 
@@ -33,10 +37,11 @@ public class ReceptionController {
 	@Autowired
 	private DoctorService doctorService;
 	
-
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	
-	@PostMapping("/regsiter")
+	@PostMapping("/register")
 	public ResponseEntity<Reception> saveDataFromReception( @Valid @RequestBody ReceptionDto receptionDto){
 		
 		Reception reception = new Reception();
@@ -45,8 +50,11 @@ public class ReceptionController {
 		reception.setEmail(receptionDto.getEmail());
 		reception.setMobile_no(receptionDto.getMobile_no());
 		reception.setShift(receptionDto.getShift());
-		reception.setPassword((receptionDto.getPassword()));
+	    reception.setToken(receptionDto.getToken());
 
+		reception.setRole(Role.RECEPTIONIST);    
+
+		reception.setPassword(passwordEncoder.encode(receptionDto.getPassword()));
 		
 		Doctor doctor = doctorService.getDoctorById(receptionDto.getDoctorid());
 		

@@ -8,4 +8,6 @@ import com.OPD_Management_Backend.OPD_Management_Backend.entities.Patient;
 @Repository
 public interface PatientRepository extends JpaRepository<Patient, Integer> {
 
+	boolean existsByDoctorid_Id(int id);
+	
 }

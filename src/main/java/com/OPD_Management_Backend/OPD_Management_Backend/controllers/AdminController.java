@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,13 +19,14 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.OPD_Management_Backend.OPD_Management_Backend.dtos.AdminDto;
 import com.OPD_Management_Backend.OPD_Management_Backend.entities.Admin;
-import com.OPD_Management_Backend.OPD_Management_Backend.entities.Admin.Role;
+import com.OPD_Management_Backend.OPD_Management_Backend.entities.Role;
 import com.OPD_Management_Backend.OPD_Management_Backend.services.AdminService;
 
 import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "http://localhost:5173")
 public class AdminController {
 
 	
@@ -33,24 +35,35 @@ public class AdminController {
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+	
 	@PostMapping("/register")
-	public ResponseEntity<Admin> saveAdminEntity(@Valid @RequestBody AdminDto adminDto){
-		
-		Admin admin = new Admin();
-		
-		admin.setName(adminDto.getName());
-		admin.setEmail(adminDto.getEmail());
-		admin.setMobileNo(adminDto.getMobileNo());
-		admin.setToken(adminDto.getToken());
-		admin.setPassword(passwordEncoder.encode(adminDto.getPassword()));
-		admin.setCreated_at(LocalDateTime.now());
-		admin.setUpdate_at(LocalDateTime.now());
-		admin.setRole(Role.ADMIN);    
-		
-		Admin saveAdmin = adminService.saveAdmin(admin);
-		
-		return new ResponseEntity<>(saveAdmin, HttpStatus.CREATED);
-	}
+public ResponseEntity<?> saveAdminEntity(
+        @Valid @RequestBody AdminDto adminDto) {
+
+    if (adminService.existsByEmail(adminDto.getEmail())) {
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("Email already exists");
+    }
+
+    Admin admin = new Admin();
+
+    admin.setName(adminDto.getName());
+    admin.setEmail(adminDto.getEmail());
+    admin.setMobileNo(adminDto.getMobileNo());
+    admin.setToken(adminDto.getToken());
+    admin.setPassword(
+            passwordEncoder.encode(adminDto.getPassword()));
+    admin.setCreated_at(LocalDateTime.now());
+    admin.setUpdate_at(LocalDateTime.now());
+    admin.setRole(Role.ADMIN);
+
+    Admin saveAdmin = adminService.saveAdmin(admin);
+
+    return new ResponseEntity<>(saveAdmin,
+            HttpStatus.CREATED);
+}
 	
 	
 	
@@ -64,7 +77,7 @@ public class AdminController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		return new ResponseEntity<>(admin , HttpStatus.OK);
+		return new ResponseEntity<>(admin ,HttpStatus.OK);
 		
 	}
 	
@@ -122,10 +135,5 @@ public class AdminController {
 		
 		return new ResponseEntity<>(HttpStatus.MOVED_PERMANENTLY);
 	}
-		
-	
-	
-	
-	
 	
 }

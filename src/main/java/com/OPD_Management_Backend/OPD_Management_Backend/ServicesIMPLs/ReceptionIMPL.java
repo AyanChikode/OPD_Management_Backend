@@ -18,7 +18,7 @@ public class ReceptionIMPL implements ReceptionService {
     private final ReceptionRepository repository;
 
     // ✅ CREATE
-    @Override
+    @Override    
     public Reception saveReception(Reception reception) {
         return repository.save(reception);
     }
@@ -43,4 +43,18 @@ public class ReceptionIMPL implements ReceptionService {
         Reception reception = getReceptionById(id);
         repository.delete(reception);
     }
+
+	@Override
+	public Reception getReceptionByEmail(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String verifyOtp(String email, String otp) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
+    
 }

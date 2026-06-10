@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 
 import com.OPD_Management_Backend.OPD_Management_Backend.entities.Doctor;
+import com.OPD_Management_Backend.OPD_Management_Backend.exception.DatabaseException;
 import com.OPD_Management_Backend.OPD_Management_Backend.exception.ResourceNotFoundException;
 import com.OPD_Management_Backend.OPD_Management_Backend.repositories.DoctorRepository;
 import com.OPD_Management_Backend.OPD_Management_Backend.services.DoctorService;
@@ -38,5 +39,49 @@ public class DoctorIMPL implements DoctorService {
     public void deleteDoctorById(int id) {
         Doctor doctor = getDoctorById(id);
         repository.delete(doctor);
+    }
+
+    @Override
+	public Doctor getDoctorByEmail(String email) {
+		// TODO Auto-generated method stub
+		try {
+			
+			return repository.findByEmail(email).orElseThrow(() -> 
+				new ResourceNotFoundException("Doctor not found wiht email: " + email));
+			
+		} catch (Exception e) {
+
+			throw new DatabaseException("Failed to get doctor due to database error");
+		}
+	}
+    
+    @Override
+    public String verifyOtp(String email, String otp) {
+
+        try {
+
+            Doctor doctor = repository.findByEmail(email)
+                    .orElseThrow(() ->
+                            new ResourceNotFoundException("Doctor not found with email: " + email));
+
+            if (doctor.getEmailOtp() != null &&
+                    doctor.getEmailOtp().equals(otp)) {
+
+                doctor.setEmailVerify(true);
+
+                // OTP remove after verification
+                doctor.setEmailOtp(null);
+
+                repository.save(doctor);
+
+                return "OTP Verified Successfully";
+            }
+
+            return "Invalid OTP";
+
+        } catch (Exception e) {
+
+            throw new DatabaseException("Failed to verify OTP");
+        }
     }
 }

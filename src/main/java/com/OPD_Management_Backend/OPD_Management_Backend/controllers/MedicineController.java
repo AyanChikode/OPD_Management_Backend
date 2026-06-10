@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/medicines")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class MedicineController {
 	
 	@Autowired

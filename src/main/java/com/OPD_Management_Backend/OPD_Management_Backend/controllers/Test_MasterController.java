@@ -25,7 +25,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/testmasters")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class Test_MasterController {
 	
 	@Autowired

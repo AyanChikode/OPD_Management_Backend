@@ -2,7 +2,10 @@ package com.OPD_Management_Backend.OPD_Management_Backend.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,10 +33,16 @@ public class Reception {
 	private String mobile_no;
 	private String shift;
 	private String password;
+	@Enumerated(EnumType.STRING)
+	private Role role = Role.RECEPTIONIST; 
+	@Column(length = 500)
+	private String token;
 	
 	@ManyToOne
 	@JoinColumn(name = "DoctorId")
-	@JsonIgnoreProperties(value = {"doctorid"} , allowSetters = true)
+	@JsonIgnoreProperties(value = "doctorid" , allowSetters = true)
 	private Doctor doctorid;
+
+	
 
 }

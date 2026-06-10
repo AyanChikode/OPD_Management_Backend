@@ -23,13 +23,17 @@ public class ReceptionDto {
     @Pattern(regexp = "^[0-9]{10}$", message = "Mobile number must be 10 digits")
     private String mobile_no;
 
-    @NotBlank(message = "Shift is required")
     private String shift;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;
+    
+	private String role; 
+	
+	private String Token;
 
+   
     @NotNull(message = "Id must be required")
 	@Positive(message = "ID must be positive")
     private int doctorid;

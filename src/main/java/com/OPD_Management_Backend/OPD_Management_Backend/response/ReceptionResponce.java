@@ -6,19 +6,15 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @ToString
-public class DoctorResponce {
-	
+public class ReceptionResponce {
+
 	private int id;
 	private String name;
-	private String password;
-	private String specialization;
 	private String email;
-	private String qulification;
-	private String clinic_name;
-	private String address;
-	private String mobileNo;
-
+	private String mobile_no;
+	private String shift;
+	private int doctorid;
 }

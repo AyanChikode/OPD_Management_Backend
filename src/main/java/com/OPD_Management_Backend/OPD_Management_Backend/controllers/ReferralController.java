@@ -32,7 +32,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/referrals")
-@CrossOrigin
+@CrossOrigin(origins = "http://localhost:5173")
 public class ReferralController {
 	
 	@Autowired

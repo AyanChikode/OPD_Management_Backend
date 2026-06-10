@@ -28,7 +28,7 @@ public class PrescriptionDto {
 	private int afternoon_dose;
 	@Min(value = 0, message = "Quantity must be at least 1")
 	private int evening_dose;
-	@Min(value = 1, message = "Quantity must be at least 1")
+	@Min(value = 1, message = "duration_days must be at least 1")
 	private int duration_days;
 	@Min(value = 1, message = "Quantity must be at least 1")
 	private int total_quantity;
